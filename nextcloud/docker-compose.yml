@@ -1,4 +1,4 @@
-version: '3'
+version: '3.7'
 
 services:
   db:
@@ -7,10 +7,24 @@ services:
     restart: always
     volumes:
       - db:/var/lib/mysql
-    environment:
-      - MYSQL_ROOT_PASSWORD_FILE= /run/secrets/nextcloud-mysql-root-password
-      - MYSQL_PASSWORD_FILE= /run/secrets/nextcloud-mysql-password
-      - MYSQL_DATABASE= nextcloud
-      - MYSQL_USER_FILE= /run/secrets/nextcloud-mysql-user
+    secrets:
+      - source: nextcloud-mysql-password
+        target: MYSQL_PASSWORD_FILE
+      - source: nextcloud-mysql-root-password
+        target: MYSQL_ROOT_PASSWORD_FILE
+      - source: nextcloud-mysql-database
+        target: MYSQL_DATABASE_FILE
+      - source: nextcloud-mysql-user
+        target: MYSQL_USER_FILE
+
 volumes:
   db:
+secrets:
+  nextcloud-mysql-password:
+    external: true
+  nextcloud-mysql-root-password:
+    external: true
+  nextcloud-mysql-database:
+    external: true
+  nextcloud-mysql-user:
+    external: true
