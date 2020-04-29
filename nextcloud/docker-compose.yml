@@ -10,7 +10,7 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD_FILE= /run/secrets/nextcloud-mysql-root-password
       - MYSQL_PASSWORD_FILE= /run/secrets/nextcloud-mysql-password
-      - MYSQL_DATABASE_FILE= /run/secrets/nextcloud-mysql-database
+      - MYSQL_DATABASE= nextcloud
       - MYSQL_USER_FILE= /run/secrets/nextcloud-mysql-user
 volumes:
   db:
