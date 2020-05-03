@@ -7,8 +7,8 @@ checkEnvironment() {
 
 runNginx() {
     docker run --detach \
-        --name nginx-proxy \
-        --publish 8080:80 \
+        --name proxy \
+        --publish 8080:8080 \
         nginx:latest
 }
 
