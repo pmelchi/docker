@@ -2,7 +2,7 @@
 
 checkEnvironment() {
     #Check if the required environment exist
-    echo "Nothing to check"
+    echo "Remember to add LETSENCRYPT_EMAIL"
 }
 
 runNginx() {
@@ -18,11 +18,12 @@ runNginx() {
 }
 
 runLetsEncrypt() {
+    echo "You are emailing to: ${LETSENCRYPT_EMAIL}"
     docker run --detach \
         --name nginx-proxy-letsencrypt \
         --volumes-from nginx-proxy \
         --volume /var/run/docker.sock:/var/run/docker.sock:ro \
-        --env "DEFAULT_EMAIL=${letsencrypt-email}" \
+        --env "DEFAULT_EMAIL=${LETSENCRYPT_EMAIL}" \
         jrcs/letsencrypt-nginx-proxy-companion    
 }
 
