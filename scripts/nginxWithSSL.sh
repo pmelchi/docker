@@ -22,7 +22,7 @@ runLetsEncrypt() {
         --name nginx-proxy-letsencrypt \
         --volumes-from nginx-proxy \
         --volume /var/run/docker.sock:/var/run/docker.sock:ro \
-        --env "DEFAULT_EMAIL=mail@yourdomain.tld" \
+        --env "DEFAULT_EMAIL=${letsencrypt-email}" \
         jrcs/letsencrypt-nginx-proxy-companion    
 }
 
