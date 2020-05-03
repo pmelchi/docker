@@ -27,6 +27,6 @@ runLetsEncrypt() {
         jrcs/letsencrypt-nginx-proxy-companion    
 }
 
-checkEnvironment()
-runNginx()
-runLetsEncrypt()
+checkEnvironment
+runNginx
+runLetsEncrypt
