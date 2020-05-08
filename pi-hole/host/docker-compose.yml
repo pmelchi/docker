@@ -1,0 +1,21 @@
+version: "3"
+
+services:
+  pihole:
+    container_name: pihole
+    image: pihole/pihole:latest
+    network_mode: "hosts"
+    environment:
+      TZ: "America/Chicago"
+      ServerIP: "10.0.1.102"
+    volumes:
+       - "pihole:/etc/pihole/"
+       - "pihole-dnsmasq:/etc/dnsmasq.d/"
+    dns:
+      - 127.0.0.1
+      - 1.1.1.1
+    restart: unless-stopped
+    
+volumes:
+  pihole:
+  pihole-dnsmasq:
