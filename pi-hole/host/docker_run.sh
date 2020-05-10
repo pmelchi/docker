@@ -1,5 +1,6 @@
 #!/bin/bash
-
+#Although docker-compose is beatiful, it's problematic to run on swarm specific containers
+#This script should help run the service on a specific host
 docker run -d \
     --name pihole \
     --network host \
