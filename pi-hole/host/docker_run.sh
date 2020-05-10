@@ -4,7 +4,7 @@ docker run -d \
     --name pihole \
     --network host \
     -e TZ="America/Chicago" \
-    -e ServerIP="10.0.1.102"
+    -e ServerIP="10.0.1.102" \
     --mount source=vol-pihole,destination=/etc/pihole/ \
     --mount source=vol-pihole-dnsmasq,destination=/etc/dnsmasq.d/ \
     --dns=127.0.0.1 --dns=1.1.1.1 \
