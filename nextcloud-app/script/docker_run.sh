@@ -5,16 +5,14 @@ NEXTCLOUD_STORAGE=/nextcloud
 
 docker network create -d overlay --attachable nextcloud-network
 
-#Secrets are only available inside a swarm (which can also be standalone)
 #Path to "${NEXTCLOUD_STORAGE}/mysql" must exist
+#env.list file must be updated with your values
 docker run -d \
     --name nextcloud-db \
-    -e MYSQL_ROOT_PASSWORD_FILE=/run/secrets/NEXTCLOUD_MYSQL_ROOT_PASSWORD \
-    -e MYSQL_PASSWORD_FILE=/run/secrets/NEXTCLOUD_MYSQL_PASSWORD \
-    -e MYSQL_DATABASE_FILE=/run/secrets/NEXTCLOUD_MYSQL_DATABASE \
-    -e MYSQL_USER_FILE=/run/secrets/NEXTCLOUD_MYSQL_USER \
+    --env-file=env.list \
     --mount type=bind,source="${NEXTCLOUD_STORAGE}/mysql",target=/var/lib/mysql \
     --network=nextcloud-network \
+    --restart=unless-stopped \
     mariadb:latest \
     --transaction-isolation=READ-COMMITTED \
     --binlog-format=ROW
