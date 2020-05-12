@@ -4,76 +4,49 @@ services:
   db:
     image: mariadb
     command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW
-    restart: always
     volumes:
-      - db:/var/lib/mysql
+      - nextcloud-db:/var/lib/mysql
     environment:
       - MYSQL_ROOT_PASSWORD=
     env_file:
       - db.env
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.disk == hdd
+      restart_policy:
+        condition: on-failure
+        max_attempts: 1
+    networks:
+      - nextcloud-net
 
   app:
     image: nextcloud:fpm-alpine
-    restart: always
     volumes:
-      - nextcloud:/var/www/html
+      - nextcloud-html:/var/www/html
     environment:
       - MYSQL_HOST=db
     env_file:
       - db.env
     depends_on:
       - db
-
-  web:
-    build: ./web
-    restart: always
-    volumes:
-      - nextcloud:/var/www/html:ro
-    environment:
-      - VIRTUAL_HOST=
-      - LETSENCRYPT_HOST=
-      - LETSENCRYPT_EMAIL=
-    depends_on:
-      - app
+    deploy:
+      replicas: 1
+      placement:
+          constraints:
+            - node.labels.disk == hdd
+      restart_policy:
+        condition: on-failure
+        max_attempts: 1
     networks:
-      - proxy-tier
-      - default
-
-  proxy:
-    build: ./proxy
-    restart: always
-    ports:
-      - 80:80
-      - 443:443
-    labels:
-      com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy: "true"
-    volumes:
-      - certs:/etc/nginx/certs:ro
-      - vhost.d:/etc/nginx/vhost.d
-      - html:/usr/share/nginx/html
-      - /var/run/docker.sock:/tmp/docker.sock:ro
-    networks:
-      - proxy-tier
-
-  letsencrypt-companion:
-    image: jrcs/letsencrypt-nginx-proxy-companion
-    restart: always
-    volumes:
-      - certs:/etc/nginx/certs
-      - vhost.d:/etc/nginx/vhost.d
-      - html:/usr/share/nginx/html
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-    networks:
-      - proxy-tier
-    depends_on:
-      - proxy
+      - nextcloud-net
 
 volumes:
-  db:
-  nextcloud:
-  certs:
-  vhost.d:
-  html:
+  nextcloud-db:
+    external: true
+  nextcloud-html:
+    external: true
 
 networks:
-  proxy-tier:
+  nextcloud-net:
