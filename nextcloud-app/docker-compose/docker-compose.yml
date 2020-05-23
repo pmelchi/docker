@@ -5,8 +5,14 @@ services:
     image: postgres:alpine
     volumes:
       - nextcloud-db:/var/lib/postgresql/data
-    env_file:
-      - db.env
+    environment: 
+      - POSTGRES_DB_FILE=/run/secrets/nc_postgres_db
+      - POSTGRES_USER_FILE=/run/secrets/nc_postgres_user
+      - POSTGRES_PASSWORD_FILE=/run/secrets/nc_postgres_password
+    secrets:
+      - nc_postgres_db
+      - nc_postgres_password
+      - nc_postgres_user
     deploy:
         replicas: 1
         placement:
@@ -23,8 +29,9 @@ services:
       - nextcloud-html:/var/www/html
     environment:
       - POSTGRES_HOST=db
-    env_file:
-      - db.env
+      - POSTGRES_DB_FILE=/run/secrets/nc_postgres_db
+      - POSTGRES_USER_FILE=/run/secrets/nc_postgres_user
+      - POSTGRES_PASSWORD_FILE=/run/secrets/nc_postgres_password
     depends_on:
       - db
     deploy:
@@ -100,3 +107,11 @@ volumes:
 networks:
     proxy-tier:
     nextcloud-net:
+
+secrets:
+  nc_postgres_db:
+    external: true
+  nc_postgres_password:
+    external: true
+  nc_postgres_user:
+    external: true
