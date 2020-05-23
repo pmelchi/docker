@@ -3,7 +3,6 @@ version: '3'
 services:
   db:
     image: postgres:alpine
-    restart: always
     volumes:
       - nextcloud-db:/var/lib/postgresql/data
     env_file:
@@ -16,9 +15,10 @@ services:
         restart_policy:
             condition: on-failure
             max_attempts: 1
+    networks: 
+        - nextcloud-net
   app:
     image: nextcloud:fpm-alpine
-    restart: always
     volumes:
       - nextcloud-html:/var/www/html
     environment:
@@ -33,26 +33,35 @@ services:
             constraints:
                 - node.labels.disk == hdd
         restart_policy:
-            cond
+            condition: on-failure
+            max_attempts: 1
+    networks: 
+        - nextcloud-net
 
   web:
     build: ./web
-    restart: always
     volumes:
-      - nextcloud:/var/www/html:ro
+      - nextcloud-html:/var/www/html:ro
     environment:
       - VIRTUAL_HOST=
       - LETSENCRYPT_HOST=
       - LETSENCRYPT_EMAIL=
     depends_on:
       - app
+    deploy:
+        replicas: 1
+        placement:
+            constraints: 
+                - node.labels.disk === hdd
+        restart_policy:
+            condition: on-failure
+            max_attempts: 1
     networks:
-      - proxy-tier
-      - default
+        - proxy-tier
+        - default
 
   proxy:
     build: ./proxy
-    restart: always
     ports:
       - 80:80
       - 443:443
@@ -89,4 +98,5 @@ volumes:
   html:
 
 networks:
-  proxy-tier:
+    proxy-tier:
+    nextcloud-net:
