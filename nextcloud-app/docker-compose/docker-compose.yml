@@ -46,7 +46,7 @@ services:
         - nextcloud-net
 
   web:
-    build: ./web
+    image: pmelchi/nextcloud-web:example
     volumes:
       - nextcloud-html:/var/www/html:ro
     environment:
@@ -68,7 +68,7 @@ services:
         - default
 
   proxy:
-    build: ./proxy
+    image: pmelchi/nextcloud-proxy:10G
     ports:
       - 80:80
       - 443:443
