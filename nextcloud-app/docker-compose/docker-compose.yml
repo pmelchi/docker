@@ -65,7 +65,7 @@ services:
             max_attempts: 1
     networks:
         - proxy-tier
-        - default
+        - nextcloud-net
 
   proxy:
     image: pmelchi/nextcloud-proxy:10G
