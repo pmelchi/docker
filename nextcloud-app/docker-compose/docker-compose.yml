@@ -46,7 +46,7 @@ services:
         - nextcloud-net
 
   web:
-    image: pmelchi/nextcloud-web:pi
+    image: pmelchi/nextcloud-web:example
     volumes:
       - nextcloud-html:/var/www/html:ro
     environment:
