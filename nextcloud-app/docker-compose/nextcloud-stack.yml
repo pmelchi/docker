@@ -66,22 +66,6 @@ services:
     networks:
         - proxy-tier
         - nextcloud-net
-
-  debugger:
-    image: busybox
-    depends_on:
-      - app
-    deploy:
-        replicas: 1
-        placement:
-            constraints: 
-                - node.labels.disk == hdd
-        restart_policy:
-            condition: on-failure
-            max_attempts: 1
-    networks:
-        - proxy-tier
-        - nextcloud-net
 volumes:
   nextcloud-db:
     external: true
