@@ -19,7 +19,7 @@ services:
   certbot:
     image: certbot/certbot
     volumes: 
-      - certbot-confg:/etc/letsencrypt
+      - certbot-conf:/etc/letsencrypt
       - certbot-www:/var/www/certbot
     deploy:
       replicas: 1
