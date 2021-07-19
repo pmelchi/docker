@@ -1,4 +1,6 @@
-# Set your own username and password
+# Set your own username and password for mongo and mongo expres
+# and then start your instance with:
+# docker-compose -f stack.yml up
 version: '3.1'
 
 services:
