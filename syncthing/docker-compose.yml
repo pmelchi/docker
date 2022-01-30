@@ -9,19 +9,16 @@ services:
       - PGID=100
       - TZ=America/Chicago
     volumes:
-      - /syncthing/config:/config
-      - /syncthing/data1:/data1
-      - /syncthing/data2:/data2
+      - syncthing-config:/config
+      - syncthing-data1:/data1
+      - syncthing-data:/data2
     ports:
       - 8384:8384
       - 22000:22000/tcp
       - 22000:22000/udp
       - 21027:21027/udp
     restart: unless-stopped
-volumenes:
+volumes:
   syncthing-config:
-    external: true
   syncthing-data1:
-    external: true
   syncthing-data2:
-    external: true
